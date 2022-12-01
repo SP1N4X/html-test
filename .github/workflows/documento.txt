@@ -1,0 +1,17 @@
+per ogni tabella della pagina -> trova tabella che contiene font.text 'GOAL PER TIMES SEGMENT'
+per la seconda tr nella tabella 
+1 td della tr = tabella generale squadra casa
+2 td della tr = tabella generale squadra trasferta
+
+tabella specifica partite casa/trasferta = 2 table di td
+RIGA HT GOAL FATTI = 15 tr della tabella specifica
+RIGA HT GOAL SUBITI = 16 tr della tabella specifica
+
+RIGA 2HT GOAL FATTI = 18 tr della tabella specifica
+RIGA 2HT GOAL SUBITI = 19 tr della tabella specifica
+
+GOAL FATTI HT = b.text di RIGA HT GOAL FATTI 
+GOAL SUBITI HT = b.text di RIGA HT GOAL SUBITI
+
+GOAL FATTI 2HT = b.text di RIGA 2HT GOAL FATTI 
+GOAL SUBITI 2HT = b.text di RIGA 2HT GOAL SUBITI 
