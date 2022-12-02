@@ -1,9 +1,4 @@
-import requests
 from bs4 import BeautifulSoup
-url = 'https://www.soccerstats.com/pmatch.asp?league=england3&stats=428-12-3-2023'
-response = requests.get(url)
-soup = BeautifulSoup(response.content, 'html.parser')
-diff = 0.3
 
 def CalcoloAvgCornerCasaTras(riga):
     tds = riga.find_all('td')    
@@ -60,5 +55,4 @@ def Corner(soup, diff):
                     return stringa
         return '' 
     except:
-        return                 
-print(Corner(soup, diff))
+        return ''                 

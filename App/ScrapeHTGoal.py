@@ -1,11 +1,36 @@
-import requests
 from bs4 import BeautifulSoup
 
-def Calcolo_HT_Avg_goal_home(PG_casa, Scoring_Rate_HT_home, Goals_scored_home):
-    Goals_scored_home = Scoring_Rate_HT_home/100*Goals_scored_home
-    HT_Avg_goal_home = Goals_scored_home/PG_casa
+def Calcolo(g_fatti_casa, g_subiti_tra, diff):
+    diff_casa = float(g_fatti_casa) - float(g_subiti_tra)
 
-    return HT_Avg_goal_home
+    if diff_casa <= diff and diff_casa >= -diff:
+        g_min = ((float(g_fatti_casa) + float(g_subiti_tra))/2) - diff
+        if int(g_min) > 0:
+            return str(int(g_min))
+        return '-'
+    return '-'
+
+def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras):
+    avgHTFattiCasa = gHTFattiCasa/PGCasa
+    avgHTSubitiTras = gHTSubitiTras/PGTras
+    goalCasaHT = Calcolo(avgHTFattiCasa, avgHTSubitiTras)
+
+    avgHTFattiTras = gHTFattiTras/PGTras
+    avgHTSubitiCasa = gHTSubitiCasa/PGCasa
+    goalTrasHT = Calcolo(avgHTFattiTras, avgHTSubitiCasa)
+
+    avg2HTFattiCasa = g2HTFattiCasa/PGCasa
+    avg2HTSubitiTras = g2HTSubitiTras/PGTras
+    goalCasa2HT = Calcolo(avg2HTFattiCasa, avg2HTSubitiTras)
+    
+    avg2HTFattiTras = g2HTFattiTras/PGTras
+    avg2HTSubitiCasa = g2HTSubitiCasa/PGCasa
+    goalTras2HT = Calcolo(avg2HTFattiTras, avg2HTSubitiCasa)
+
+    if goalCasaHT != '-' or goalTrasHT != '-' or goalCasa2HT != '-' or goalTras2HT != '-':
+        stringa = '[GOAL TEMPI] \n1st. HT \nCasa: ' + goalCasaHT + '\nTras: ' + goalTrasHT + '\n \n2nd. HT \nCasa: ' + goalCasa2HT + '\nTras: ' + goalTras2HT + '\n'
+        return stringa 
+    return ''
 
 def CalcoloTabCasaTras(tr):
     tds = tr.find_all('td',{'align':'center', 'valign':'top'})
@@ -38,20 +63,13 @@ def CalcoloTable(table):
     
     return goalHTFattiCasa, goalHTSubitiCasa, goal2HTFattiCasa, goal2HTSubitiCasa, goalHTFattiTras, goalHTSubitiTras, goal2HTFattiTras, goal2HTSubitiTras
 
-def CalcoloGoalFromHtml(href):
-    url_base = "https://www.soccerstats.com/"
-    
+def HTGoal(soup, PGCasa, PGTras, diff):  
     try:
-        response = requests.get(url_base + href)
-        soup = BeautifulSoup(response.content, 'html.parser')
-        
         for i, table in enumerate(soup.find_all('table')):
             if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
                 gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
-                    
-        print(int(gHTFattiCasa), int(gHTSubitiCasa), int(g2HTFattiCasa), int(g2HTSubitiCasa), int(gHTFattiTras), int(gHTSubitiTras), int(g2HTFattiTras), int(g2HTSubitiTras))
+                stringa = ScriviStringa(diff, PG, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
+                return stringa   
+        return '' 
     except:
-        print('Errore nelle calcolo goal')
-                   
-href = 'pmatch.asp?league=england4&stats=328-14-20-2023-crewe-alexandra-newport'
-CalcoloGoalFromHtml(href)
+        return ''
