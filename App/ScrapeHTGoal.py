@@ -13,19 +13,19 @@ def Calcolo(g_fatti_casa, g_subiti_tra, diff):
 def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras):
     avgHTFattiCasa = gHTFattiCasa/PGCasa
     avgHTSubitiTras = gHTSubitiTras/PGTras
-    goalCasaHT = Calcolo(avgHTFattiCasa, avgHTSubitiTras)
+    goalCasaHT = Calcolo(avgHTFattiCasa, avgHTSubitiTras, diff)
 
     avgHTFattiTras = gHTFattiTras/PGTras
     avgHTSubitiCasa = gHTSubitiCasa/PGCasa
-    goalTrasHT = Calcolo(avgHTFattiTras, avgHTSubitiCasa)
+    goalTrasHT = Calcolo(avgHTFattiTras, avgHTSubitiCasa, diff)
 
     avg2HTFattiCasa = g2HTFattiCasa/PGCasa
     avg2HTSubitiTras = g2HTSubitiTras/PGTras
-    goalCasa2HT = Calcolo(avg2HTFattiCasa, avg2HTSubitiTras)
+    goalCasa2HT = Calcolo(avg2HTFattiCasa, avg2HTSubitiTras, diff)
     
     avg2HTFattiTras = g2HTFattiTras/PGTras
     avg2HTSubitiCasa = g2HTSubitiCasa/PGCasa
-    goalTras2HT = Calcolo(avg2HTFattiTras, avg2HTSubitiCasa)
+    goalTras2HT = Calcolo(avg2HTFattiTras, avg2HTSubitiCasa, diff)
 
     if goalCasaHT != '-' or goalTrasHT != '-' or goalCasa2HT != '-' or goalTras2HT != '-':
         stringa = '[GOAL TEMPI] \n1st. HT \nCasa: ' + goalCasaHT + '\nTras: ' + goalTrasHT + '\n \n2nd. HT \nCasa: ' + goalCasa2HT + '\nTras: ' + goalTras2HT + '\n'
@@ -68,7 +68,7 @@ def HTGoal(soup, PGCasa, PGTras, diff):
         for i, table in enumerate(soup.find_all('table')):
             if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
                 gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
-                stringa = ScriviStringa(diff, PG, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
+                stringa = ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
                 return stringa   
         return '' 
     except:

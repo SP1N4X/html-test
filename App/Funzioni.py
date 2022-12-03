@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from ScrapeCorner import Corner
 from ScrapeHTGoal import HTGoal
 from ScrapeCalcoloRisultato import CalcoloRisultato 
+from ScrapeCampionato import TrovaCampionato
 
 
 def ScrivereStringaCompleta(casa, tras, orario, campionato, stringaRisultato, avgCornerString, goalHTString):
