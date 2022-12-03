@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from Funzioni import FindMatch
 
-day = 1
+day = 2
 n_partite = 10
 differenza = 0.3
 

@@ -45,7 +45,8 @@ def FindMatch(row, url_base, n_partite, differenza):
                 campionato = 'Campionato non trovato'
             try:
                 avgCornerString = Corner(soupLink, differenza)
-            except:
+            except Exception as e:
+                print(e)
                 avgCornerString = ''     
             try:
                 goalHTString = HTGoal(soupLink, partite_casa, partite_tras, differenza)

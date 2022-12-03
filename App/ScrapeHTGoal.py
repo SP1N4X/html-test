@@ -65,8 +65,8 @@ def CalcoloTable(table):
 
 def HTGoal(soup, PGCasa, PGTras, diff):  
     try:
-        for i, table in enumerate(soup.find_all('table')):
-            if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
+        for table in soup.find_all('table'):
+            if table.find_all('font', text = 'GOALS PER TIME SEGMENT') != None:
                 gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
                 stringa = ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
                 return stringa   
