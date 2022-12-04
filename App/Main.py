@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 from Funzioni import FindMatch
 
-day = 2
+day = 3
 n_partite = 10
-differenza = 2
+differenza = 0.3
 
 url = "https://www.soccerstats.com/matches.asp?matchday=" + str(day) + "&listing=1"
 url_base = "https://www.soccerstats.com/"

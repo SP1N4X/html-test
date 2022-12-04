@@ -15,6 +15,8 @@ def ScrivereStringaCompleta(casa, tras, orario, campionato, stringaRisultato, av
             stringa = stringa + avgCornerString
         if goalHTString != '':
             stringa = stringa + goalHTString
+        
+        stringa = stringa + '\n'
 
         return stringa
     else:
@@ -28,9 +30,10 @@ def FindMatch(row, url_base, n_partite, differenza):
     if partite_casa != "" and int(partite_casa) >= n_partite and partite_tras != "" and int(partite_tras) >= n_partite:
         casa = dati[9].text
         tras = dati[11].text
+        partite_casa = int(partite_casa)
+        partite_tras = int(partite_tras)
         orario = dati[10].find("font").text
-        link = dati[0].find("a", href=True)['href']
-
+        link = dati[-1].find("a", href=True)['href']
         if link != None:
             try:
                 responseLink = requests.get(url_base + link)

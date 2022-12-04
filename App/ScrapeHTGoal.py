@@ -1,34 +1,50 @@
 from bs4 import BeautifulSoup
 
-def Calcolo(g_fatti_casa, g_subiti_tra, diff):
-    diff_casa = float(g_fatti_casa) - float(g_subiti_tra)
+def CalcoloRisultato(diff, avgHTFattiCasa, avgHTSubitiCasa, avgHTFattiTras, avgHTSubitiTras):
+    avgGoalTempo = (avgHTFattiCasa + avgHTSubitiTras)/2 + (avgHTFattiTras + avgHTSubitiCasa)/2
+    minAvgGoalTempo = avgGoalTempo - diff
+    
+    if minAvgGoalTempo >= 1:
+        return True
+    return False
+
+def CalcoloGoal(g_fatti_casa, g_subiti_tra, diff):
+    diff_casa = g_fatti_casa - g_subiti_tra
 
     if diff_casa <= diff and diff_casa >= -diff:
-        g_min = ((float(g_fatti_casa) + float(g_subiti_tra))/2) - diff
-        if int(g_min) > 0:
-            return str(int(g_min))
-        return '-'
-    return '-'
+        True
+    return False
 
 def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras):
     avgHTFattiCasa = gHTFattiCasa/PGCasa
     avgHTSubitiTras = gHTSubitiTras/PGTras
-    goalCasaHT = Calcolo(avgHTFattiCasa, avgHTSubitiTras, diff)
+    goalCasaHT = CalcoloGoal(avgHTFattiCasa, avgHTSubitiTras, diff)
 
     avgHTFattiTras = gHTFattiTras/PGTras
     avgHTSubitiCasa = gHTSubitiCasa/PGCasa
-    goalTrasHT = Calcolo(avgHTFattiTras, avgHTSubitiCasa, diff)
+    goalTrasHT = CalcoloGoal(avgHTFattiTras, avgHTSubitiCasa, diff)
 
     avg2HTFattiCasa = g2HTFattiCasa/PGCasa
     avg2HTSubitiTras = g2HTSubitiTras/PGTras
-    goalCasa2HT = Calcolo(avg2HTFattiCasa, avg2HTSubitiTras, diff)
+    goalCasa2HT = CalcoloGoal(avg2HTFattiCasa, avg2HTSubitiTras, diff)
     
     avg2HTFattiTras = g2HTFattiTras/PGTras
     avg2HTSubitiCasa = g2HTSubitiCasa/PGCasa
-    goalTras2HT = Calcolo(avg2HTFattiTras, avg2HTSubitiCasa, diff)
+    goalTras2HT = CalcoloGoal(avg2HTFattiTras, avg2HTSubitiCasa, diff)
 
-    if goalCasaHT != '-' or goalTrasHT != '-' or goalCasa2HT != '-' or goalTras2HT != '-':
-        stringa = '[GOAL TEMPI] \n1st. HT \nCasa: ' + goalCasaHT + '\nTras: ' + goalTrasHT + '\n \n2nd. HT \nCasa: ' + goalCasa2HT + '\nTras: ' + goalTras2HT + '\n'
+    if goalCasaHT and goalTrasHT:
+        resultHT = CalcoloRisultato(diff, avgHTFattiCasa, avgHTSubitiCasa, avgHTFattiTras, avgHTSubitiTras)
+    if goalCasa2HT and goalTras2HT:
+        result2HT = CalcoloRisultato(diff, avg2HTFattiCasa, avg2HTSubitiCasa, avg2HTFattiTras, avg2HTSubitiTras)
+    
+    risultato = ''
+    if resultHT:
+        risultato = risultato + '\n1st. HT Over'
+    if result2HT:
+        risultato = risultato + '\n2nd. HT Over'
+    
+    if risultato != '':
+        stringa = '[GOAL TEMPI]' + risultato
         return stringa 
     return ''
 
@@ -53,7 +69,7 @@ def CalcoloGoalFattiSubiti(tableSpecifica):
     goal2HTFatti = trs[17].find('b').text
     goal2HTSubiti = trs[18].find('b').text
 
-    return goalHTFatti, goalHTSubiti, goal2HTFatti, goal2HTSubiti
+    return int(goalHTFatti), int(goalHTSubiti), int(goal2HTFatti), int(goal2HTSubiti)
 
 def CalcoloTable(table):
     tableGeneraleCasa, tableGeneraleTras = CalcoloTabCasaTras(table.find_all('tr')[1])
@@ -66,7 +82,7 @@ def CalcoloTable(table):
 def HTGoal(soup, PGCasa, PGTras, diff):  
     try:
         for table in soup.find_all('table'):
-            if table.find_all('font', text = 'GOALS PER TIME SEGMENT') != None:
+            if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
                 gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
                 stringa = ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
                 return stringa   
