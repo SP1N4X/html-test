@@ -10,8 +10,6 @@ def CalcoloAvgCornerCasaTras(riga):
 def CalcoloTabella(table):
     trs = table.find_all('tr')
 
-    
-
     rigaCornerFor = trs[1]
     rigaCornerAgainst = trs[2]
     avgCornerForCasa, avgCornerForTras = CalcoloAvgCornerCasaTras(rigaCornerFor)
@@ -50,18 +48,14 @@ def ScriviStringa(minCasa, maxCasa, minTras, maxTras):
     
 def Corner(soup, diff):
     #try:
-        soup = BeautifulSoup(soup, 'html.parser')
-        print('found')
-        for table in soup.find_all('table'):
-            if table.find_all('font', text = 'Total Corners = Corners For + Corners Against') != None:
-                file = open('tableHTML.html', 'w')
-                file.write(str(table))
-                file.close()
-                avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras = CalcoloTabella(table)
-                if AvgCornerGiusti(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff):
-                    minCasa, maxCasa, minTras, maxTras = CalcoloMedie(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff)
-                    stringa = ScriviStringa(minCasa, maxCasa, minTras, maxTras)
-                    return stringa
-        return '' 
+    for table in soup.find_all('table'):
+        if table.find('font', text = 'Total Corners = Corners For + Corners Against') != None:
+            avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras = CalcoloTabella(table)
+            if AvgCornerGiusti(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff):
+                minCasa, maxCasa, minTras, maxTras = CalcoloMedie(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff)
+                stringa = ScriviStringa(minCasa, maxCasa, minTras, maxTras)
+                return stringa
+    return '' 
     #except:
-    #    return ''                 
+    #    return ''           
+
