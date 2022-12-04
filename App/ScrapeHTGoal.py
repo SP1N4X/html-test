@@ -1,5 +1,3 @@
-from bs4 import BeautifulSoup
-
 def CalcoloRisultato(diff, avgHTFattiCasa, avgHTSubitiCasa, avgHTFattiTras, avgHTSubitiTras):
     avgGoalTempo = (avgHTFattiCasa + avgHTSubitiTras)/2 + (avgHTFattiTras + avgHTSubitiCasa)/2
     minAvgGoalTempo = avgGoalTempo - diff

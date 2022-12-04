@@ -1,7 +1,3 @@
-from bs4 import BeautifulSoup
-import requests
-
-
 def CalcoloAvgCornerCasaTras(riga):
     tds = riga.find_all('td')
     avgCornerCasa = float(tds[0].find('b').text)
