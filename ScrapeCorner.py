@@ -44,7 +44,7 @@ def CalcoloMedie(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCo
 
 def ScriviStringa(minCasa, maxCasa, minTras, maxTras):
     minAvgCorner = minCasa + minTras
-    stringa = '[AVG CORNER] \nMinAvgCorner' + str(minAvgCorner) + '\n'
+    stringa = '[AVG CORNER] \nMinAvgCorner ' + str(minAvgCorner) + '\n'
     # stringa = '[AVG CORNER] \nCasaMinCorner' + str(minCasa) + '\nCasaMaxCorner' + str(
     #     maxCasa) + '\nTrasMinCorner' + str(minTras) + '\nTrasMaxCorner' + str(maxTras) + '\n'
     return stringa
