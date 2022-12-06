@@ -2,7 +2,6 @@ def CalcoloAvgCornerCasaTras(riga):
     tds = riga.find_all('td')
     avgCornerCasa = float(tds[0].find('b').text)
     avgCornerTras = float(tds[-1].find('b').text)
-    print(avgCornerCasa, avgCornerTras)
 
     return avgCornerCasa, avgCornerTras
 
@@ -50,6 +49,7 @@ def ScriviStringa(minCasa, maxCasa, minTras, maxTras):
 
 
 def Corner(soup, diff):
+    diff = 1
     for table in soup.find_all('table'):
         if table.find('font', text='Total Corners = Corners For + Corners Against') != None:
             avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras = CalcoloTabella(table)
