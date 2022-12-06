@@ -4,7 +4,7 @@ from Funzioni import FindMatch
 
 day = input()
 n_partite = 10
-differenza = 1
+differenza = 0.3
 
 url = "https://www.soccerstats.com/matches.asp?matchday=" + str(day) + "&listing=1"
 url_base = "https://www.soccerstats.com/"

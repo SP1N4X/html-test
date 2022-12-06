@@ -43,8 +43,10 @@ def CalcoloMedie(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCo
 
 
 def ScriviStringa(minCasa, maxCasa, minTras, maxTras):
-    stringa = '[AVG CORNER] \nCasaMinCorner' + str(minCasa) + '\nCasaMaxCorner' + str(
-        maxCasa) + '\nTrasMinCorner' + str(minTras) + '\nTrasMaxCorner' + str(maxTras) + '\n'
+    minAvgCorner = minCasa + minTras
+    stringa = '[AVG CORNER] \nMinAvgCorner' + str(minAvgCorner) + '\n'
+    # stringa = '[AVG CORNER] \nCasaMinCorner' + str(minCasa) + '\nCasaMaxCorner' + str(
+    #     maxCasa) + '\nTrasMinCorner' + str(minTras) + '\nTrasMaxCorner' + str(maxTras) + '\n'
     return stringa
 
 
@@ -56,6 +58,5 @@ def Corner(soup, diff):
             if AvgCornerGiusti(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff):
                 minCasa, maxCasa, minTras, maxTras = CalcoloMedie(avgCornerForCasa, avgCornerForTras, avgCornerAgainstCasa, avgCornerAgainstTras, diff)
                 stringa = ScriviStringa(minCasa, maxCasa, minTras, maxTras)
-                print(stringa)
                 return stringa
     return ''
