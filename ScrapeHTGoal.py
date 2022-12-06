@@ -1,16 +1,18 @@
+import requests
+from bs4 import BeautifulSoup
+
 def CalcoloRisultato(diff, avgHTFattiCasa, avgHTSubitiCasa, avgHTFattiTras, avgHTSubitiTras):
     avgGoalTempo = (avgHTFattiCasa + avgHTSubitiTras)/2 + (avgHTFattiTras + avgHTSubitiCasa)/2
     minAvgGoalTempo = avgGoalTempo - diff
-    
+   
     if minAvgGoalTempo >= 1:
         return True
     return False
 
 def CalcoloGoal(g_fatti_casa, g_subiti_tra, diff):
     diff_casa = g_fatti_casa - g_subiti_tra
-
     if diff_casa <= diff and diff_casa >= -diff:
-        True
+        return True
     return False
 
 def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras):
@@ -29,7 +31,10 @@ def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCa
     avg2HTFattiTras = g2HTFattiTras/PGTras
     avg2HTSubitiCasa = g2HTSubitiCasa/PGCasa
     goalTras2HT = CalcoloGoal(avg2HTFattiTras, avg2HTSubitiCasa, diff)
-
+    
+    resultHT = False
+    result2HT = False
+    
     if goalCasaHT and goalTrasHT:
         resultHT = CalcoloRisultato(diff, avgHTFattiCasa, avgHTSubitiCasa, avgHTFattiTras, avgHTSubitiTras)
     if goalCasa2HT and goalTras2HT:
@@ -43,7 +48,7 @@ def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCa
     
     if risultato != '':
         stringa = '[GOAL TEMPI]' + risultato
-        return stringa 
+        return stringa
     return ''
 
 def CalcoloTabCasaTras(tr):
@@ -78,12 +83,11 @@ def CalcoloTable(table):
     return goalHTFattiCasa, goalHTSubitiCasa, goal2HTFattiCasa, goal2HTSubitiCasa, goalHTFattiTras, goalHTSubitiTras, goal2HTFattiTras, goal2HTSubitiTras
 
 def HTGoal(soup, PGCasa, PGTras, diff):  
-    try:
-        for table in soup.find_all('table'):
-            if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
-                gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
-                stringa = ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
-                return stringa   
-        return '' 
-    except:
-        return ''
+    
+    for table in soup.find_all('table'):
+        if table.find('font', text = 'GOALS PER TIME SEGMENT') != None:
+            gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras = CalcoloTable(table)
+            stringa = ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCasa, g2HTSubitiCasa, gHTFattiTras, gHTSubitiTras, g2HTFattiTras, g2HTSubitiTras)
+            return stringa   
+    return ''
+
