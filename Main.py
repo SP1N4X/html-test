@@ -4,9 +4,8 @@ from Funzioni import FindMatch
 import datetime
 
 DAY = input()
-giorno = (datetime.datetime.today() + datetime.timedelta(days=int(DAY)-1)).strftime('%d/%m/%Y')
-
-open(f'{giorno}.txt', 'w').close()
+giorno = (datetime.datetime.today() + datetime.timedelta(days=int(DAY)-1)).strftime('%d-%m-%Y')
+open(f'{giorno}.txt', 'w')
 
 N_PARITE = 10
 DIFFERENZA = 0.3
