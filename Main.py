@@ -1,8 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
 from Funzioni import FindMatch
+import datetime
+
 
 day = input()
+giorno = (datetime.datetime.today() + datetime.timedelta(days=int(day)-1)).strftime('%d/%m/%Y')
+open(f'{giorno}.txt', 'w').close()
+
 n_partite = 10
 differenza = 0.3
 
@@ -17,6 +22,8 @@ if response.status_code == 200:
     for row in rows:
         risultato = FindMatch(row, url_base, n_partite, differenza)
         if risultato != '':
+            with open(f'{giorno}.txt', 'a') as f:
+                f.write(risultato)
             print(risultato)
 else:          
     print('Errore nella risposta riprovare') 
