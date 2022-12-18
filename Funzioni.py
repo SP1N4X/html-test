@@ -13,7 +13,7 @@ def ConvertOrario(orario):
 
 def ScrivereStringaCompleta(casa, tras, orario, campionato, stringaRisultato, avgCornerString, goalHTString):
     if stringaRisultato != '' or avgCornerString != '' or goalHTString != '':
-        stringa = casa + ' - ' + tras + '    ' + orario + '\n(' + campionato + ')' + '\n'
+        stringa = casa + ' - ' + tras + '\n' + orario + '\n(' + campionato + ')' + '\n'
         if stringaRisultato != '':
             stringa = stringa + stringaRisultato
         if avgCornerString != '':
