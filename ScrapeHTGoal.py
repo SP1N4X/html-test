@@ -47,7 +47,7 @@ def ScriviStringa(diff, PGCasa, PGTras, gHTFattiCasa, gHTSubitiCasa, g2HTFattiCa
         risultato = risultato + '\n2nd. HT Over'
     
     if risultato != '':
-        stringa = '[GOAL TEMPI]' + risultato
+        stringa = '[GOAL TEMPI]' + risultato + '\n'
         return stringa
     return ''
 
