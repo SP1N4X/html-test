@@ -4,7 +4,12 @@ from ScrapeCorner import Corner
 from ScrapeHTGoal import HTGoal
 from ScrapeCalcoloRisultato import CalcoloRisultato 
 from ScrapeCampionato import TrovaCampionato
+from datetime import datetime
+from datetime import timedelta
 
+def ConvertOrario(orario):
+    risultato = (datetime.strptime(orario, '%H:%M') + timedelta(hours=1)).strftime('%H:%M')
+    return risultato
 
 def ScrivereStringaCompleta(casa, tras, orario, campionato, stringaRisultato, avgCornerString, goalHTString):
     if stringaRisultato != '' or avgCornerString != '' or goalHTString != '':
@@ -33,6 +38,7 @@ def FindMatch(row, url_base, n_partite, differenza):
         partite_casa = int(partite_casa)
         partite_tras = int(partite_tras)
         orario = dati[10].find("font").text
+        orario = ConvertOrario(orario)
         link = dati[-1].find("a", href=True)['href']
         if link != None:
             try:
