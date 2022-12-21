@@ -6,7 +6,7 @@ import datetime
 DAY = input()
 giorno = (datetime.datetime.today() + datetime.timedelta(days=int(DAY)-1)).strftime('%d-%m-%Y')
 
-open(f'{giorno}.txt', 'w').close()
+open(f'filePrevisioni/{giorno}.txt', 'w').close()
 
 N_PARITE = 10
 DIFFERENZA = 0.3
