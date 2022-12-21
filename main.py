@@ -22,7 +22,7 @@ if response.status_code == 200:
     for row in rows:
         risultato = FindMatch(row, URL_BASE, N_PARITE, DIFFERENZA)
         if risultato != '':
-            with open(f'{giorno}.txt', 'a') as f:
+            with open(f'filePrevisioni/{giorno}.txt', 'a') as f:
                 f.write(risultato)
             print(risultato)
 else:

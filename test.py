@@ -1,3 +1,5 @@
+import requests
+         
 json =  {}
 oggetto = {}
 def intTry(value):
@@ -7,26 +9,22 @@ def intTry(value):
     except ValueError:
         return False
 
-def downloadMatch(casa, tras):
-    print(casa, tras)
+def UploadJson(json):
+    result = requests.patch('https://testwebsocket-672a2-default-rtdb.europe-west1.firebasedatabase.app/Soccer/.json', json=json)
+    print(result.content)
 
 def CheckMatch(line):
-    split = line.split('-')
-    casa = split[0]
-    tras = split[1]
-    if intTry(casa) or intTry(tras):
-        return 
-    oggetto['casa'] = casa
-    oggetto['trasferta'] = tras
+    global oggetto
+    oggetto['partita'] = line
 
 def CheckCampionato(line):
-    line.replace('(', '')
-    line.replace(')', '')
+    line = line.replace('(', '')
+    line = line.replace(')', '')
     oggetto['campionato'] = line
 
 def PrevisioneTipo(line):
-    line.replace(']', '')
-    line.replace('[', '')
+    line = line.replace(']', '')
+    line = line.replace('[', '')
     return line
 
 def CheckEsatti(line):
@@ -44,63 +42,86 @@ def CheckMin(line):
         oggetto['MinimiTrasferta'] = split[1].replace(' ','')
 
 def CheckPrevisione(tipo, line):
-    if tipo == 'RISULTATI ESATTI':
+    print(tipo.encode())
+    if tipo == 'RISULTATI ESATTI  ':
         CheckEsatti(line)
+        print(line)
         return
     
-    if tipo == 'GOAL MINIMI':
+    if tipo == 'GOAL MINIMI  ':
         CheckMin(line)
         return
     
-    if tipo == 'AVG CORNER':
+    if tipo == 'AVG CORNER  ':
         CheckCorner(line)
         return
 
 def UpdateJson():
+    global oggetto
+    global json
     if oggetto != {}:
-        jsonOggetto =   {
-                        'casa':oggetto['casa'],
-                        'trasferta':oggetto['trasferta'],
-                        'Previsione':{},
-                        'Risultati':{}
+        jsonOggetto =   {oggetto['partita']:
+                            {
+                                'Previsione':{},
+                                'Risultati':{}
+                            }
                         }
         if 'MinimiCasa' in oggetto:
-            jsonOggetto['Previsione']['minCasa'] = oggetto['MinimiCasa']
+            if 'Previsione' in jsonOggetto[oggetto['partita']]:
+                jsonOggetto[oggetto['partita']]['Previsione']['minCasa'] = oggetto['MinimiCasa']
+            else:
+                jsonOggetto[oggetto['partita']]['Previsione'] = {'minCasa': oggetto['MinimiCasa']}
         if 'MinimiTrasferta' in oggetto:
-            jsonOggetto['Previsione']['minTras'] = oggetto['MinimiTrasferta']
+            if 'Previsione' in jsonOggetto[oggetto['partita']]:
+                jsonOggetto[oggetto['partita']]['Previsione']['minTras'] = oggetto['MinimiTrasferta']
+            else:
+                jsonOggetto[oggetto['partita']]['Previsione'] = {'minTras': oggetto['MinimiTrasferta']}
         if 'Corner' in oggetto:
-            jsonOggetto['Previsione']['corner'] = oggetto['Corner']
+            if 'Previsione' in jsonOggetto[oggetto['partita']]:
+                jsonOggetto[oggetto['partita']]['Previsione']['corner'] = oggetto['Corner']
+            else:
+                jsonOggetto[oggetto['partita']]['Previsione'] = {'corner': oggetto['Corner']}
 
-        json[today][oggetto['campionato']].append(jsonOggetto)
+        if today in json:
+            if oggetto['campionato'] in json[today]:
+                json[today][oggetto['campionato']].update(jsonOggetto)
+            else:
+                json[today].update({oggetto['campionato']: jsonOggetto})
+        else:
+            json[today] = {oggetto['campionato']: jsonOggetto}
+        
     oggetto = {}
+
+def CheckFile(fileName):
+    with open(f'{fileName}.txt', 'r') as f:
+        lines = f.readlines()
+        json[today] = {}
+        start = True
+        previsione = ''
+
+        for line in lines:
+            line = line.replace('\n', ' ')
+            if line == ' ':
+                UpdateJson()
+                start = True
+                continue
+            if start == True:
+                CheckMatch(line)
+                start = False
+                continue
+            if start == False:
+                if 'Orario:' in line:
+                    continue
+                if '(' in line and ')' in line:
+                    CheckCampionato(line)
+                    continue
+                if '[' in line and ']' in line:
+                    previsione = PrevisioneTipo(line)
+                    continue
+                CheckPrevisione(previsione, line)
+
+    UploadJson(json)
 
 
 
 today = '21-12-2022'
-with open(f'{today}.txt', 'r') as f:
-    lines = f.readlines()
-    json[today] = ''
-    i = 0
-    start = True
-    previsione = ''
-    for line in lines:
-        if line == '\n':
-            UpdateJson()
-            start == True
-            continue
-        if start == True:
-            CheckMatch(line)
-            start = False
-            continue
-        if start == False:
-            if 'Orario:' in line:
-                continue
-            if '(' in line and ')' in line:
-                CheckCampionato(line)
-                continue
-            if '[' in line and ']' in line:
-                previsione = PrevisioneTipo(line)
-                continue
-            CheckPrevisione(previsione, line)
-
-print(json)
